@@ -3,6 +3,7 @@ package ui
 import (
 	"context"
 	"fmt"
+
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -89,19 +90,17 @@ func (m authModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					context.TODO(),
 					aws.AuthInput{
 						Method: aws.DefaultProfile,
-						Region: "ap-southeast-2", // Default region; can prompt later
+						Region: "ap-southeast-2", // Default region
 					},
 				)
 				if err != nil {
 					m.list.Title = titleStyle.Render("Failed to load AWS config")
 					return m, nil
 				}
-				// Print cfg for debugging
 				fmt.Println("Loaded AWS config for region:", cfg.Region)
-				fmt.Printf("DEBUG: selected AuthType = %d\n", selected.AuthType)
 
-				// TODO: store cfg in shared app state if needed
-				return NewMainMenu(), nil
+				// Send message to transition to main menu
+				return m, func() tea.Msg { return SwitchToMainMenuMsg{} }
 
 			case 1:
 				// TODO: Named profile input

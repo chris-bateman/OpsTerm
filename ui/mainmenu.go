@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"fmt"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -50,7 +49,6 @@ type MainMenuModel struct {
 func NewMainMenu() tea.Model {
 	items := make([]list.Item, len(menuOptions))
 	for i, opt := range menuOptions {
-		fmt.Println("Adding menu item:", opt.Title) // Debug
 		items[i] = menuItem{option: opt}
 	}
 
@@ -78,7 +76,6 @@ func (m MainMenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case "enter":
 			selected := m.list.SelectedItem().(menuItem).option
-			fmt.Println("Selected action:", selected.ActionID) // Debug
 			switch selected.ActionID {
 			case "ec2":
 				// TODO: EC2 screen
@@ -100,6 +97,5 @@ func (m MainMenuModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m MainMenuModel) View() string {
-	fmt.Println("Rendering menu view") // Debug
 	return menuBoxStyle.Render(m.list.View())
 }
